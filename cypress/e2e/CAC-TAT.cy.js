@@ -63,4 +63,24 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.get('.error').should('be.visible');
   })
 
+  
+  it('Fill out and submit using custom command', () =>{
+    cy.fillMandatoryFieldsAndSubmit();
+
+    cy.get('.success').should('be.visible');
+  })
+
+  it('Fill out and submit using custom command', () =>{
+    const data = {
+        firstName : 'Marina',
+        lastName : 'Larissa',
+        phone : '489999999',
+        mail : 'marina_teste@gmail.com.br',
+        text : 'Teste(...)'
+    }
+    cy.fillMandatoryFields();
+    cy.contains('button','Enviar').click();
+    cy.get('.success').should('be.visible');
+  })
+  
 })
