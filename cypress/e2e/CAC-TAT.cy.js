@@ -7,31 +7,31 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.title().should('eq', 'Central de Atendimento ao Cliente TAT');
   })
 
-  it('Fill out and submit', () =>{
+  it('Fill out and submit', () => {
     cy.fillMandatoryFields();
-    cy.contains('button','Enviar').click();
+    cy.contains('button', 'Enviar').click();
 
     cy.get('.success').should('be.visible');
   })
 
-  it('Error message when incorrect email', () =>{
+  it('Error message when incorrect email', () => {
     cy.fillMandatoryFields();
     cy.get('#email').clear().type('nome.sobrenome');
-    cy.contains('button','Enviar').click();
+    cy.contains('button', 'Enviar').click();
 
     cy.get('.error').should('be.visible');
   })
 
-  it('Fill phone with not numeric caracters', () =>{
+  it('Fill phone with not numeric caracters', () => {
     cy.get('#phone').type('AaBbCc$!');
 
-    cy.get('#phone').should('have.value','');
+    cy.get('#phone').should('have.value', '');
   })
   it('Error message when obrigatory phone is not filled', () => {
     cy.fillMandatoryFields();
     cy.get('#phone').clear();
     cy.get('#phone-checkbox').check();
-    cy.contains('button','Enviar').click();
+    cy.contains('button', 'Enviar').click();
 
     cy.get('.error').should('be.visible');
   })
@@ -39,70 +39,69 @@ describe('Central de Atendimento ao Cliente TAT', () => {
   it('Fill and empty name, lastname, mail and phone', () => {
     cy.fillMandatoryFields();
 
-    cy.get('#firstName').should('have.value','Nome');
-    cy.get('#lastName').should('have.value','Sobrenome');
-    cy.get('#email').should('have.value','nome.sobrenome@email.com');
-    cy.get('#phone').should('have.value','489999999');
+    cy.get('#firstName').should('have.value', 'Nome');
+    cy.get('#lastName').should('have.value', 'Sobrenome');
+    cy.get('#email').should('have.value', 'nome.sobrenome@email.com');
+    cy.get('#phone').should('have.value', '489999999');
     cy.get('#firstName')
       .clear()
-      .should('have.value','');
+      .should('have.value', '');
     cy.get('#lastName')
       .clear()
-      .should('have.value','');
+      .should('have.value', '');
     cy.get('#email')
       .clear()
-      .should('have.value','');
+      .should('have.value', '');
     cy.get('#phone')
       .clear()
-      .should('have.value','');
+      .should('have.value', '');
   })
 
   it('Error message when nothing is filled', () => {
-    cy.contains('button','Enviar').click();
-    
+    cy.contains('button', 'Enviar').click();
+
     cy.get('.error').should('be.visible');
   })
 
-  
-  it('Fill out and submit using custom command', () =>{
+  it('Fill out and submit using custom command', () => {
     cy.fillMandatoryFieldsAndSubmit();
 
     cy.get('.success').should('be.visible');
   })
 
-  it('Fill out and submit using custom command', () =>{
+  it('Fill out and submit using custom command', () => {
     const data = {
-        firstName : 'Marina',
-        lastName : 'Larissa',
-        phone : '489999999',
-        mail : 'marina_teste@gmail.com.br',
-        text : 'Teste(...)'
+      firstName: 'Marina',
+      lastName: 'Larissa',
+      phone: '489999999',
+      mail: 'marina_teste@gmail.com.br',
+      text: 'Teste(...)'
     }
     cy.fillMandatoryFields();
-    cy.contains('button','Enviar').click();
+    cy.contains('button', 'Enviar').click();
     cy.get('.success').should('be.visible');
   })
-  
-  it('select a product (YouTube) by text', () =>{
+
+  it('select a product (YouTube) by text', () => {
     cy.get('#product').select('YouTube').should('have.value', 'youtube');
   })
 
-  it('select a product (Mentoria) by value', () =>{
+  it('select a product (Mentoria) by value', () => {
     cy.get('#product').select('mentoria').should('have.value', 'mentoria');
   })
 
-  it('select a product (Blog) by index', () =>{
+  it('select a product (Blog) by index', () => {
     cy.get('#product').select(1).should('have.value', 'blog');
   })
 
-  it('checks type Feedback', () =>{
+  it('checks type Feedback', () => {
     cy.get('input[type="radio"][value="feedback"]')
-    .check()
-    .should('have.value', 'feedback')
-    .should('be.checked');
+      .check()
+      .should('have.value', 'feedback')
+      .should('be.checked');
   })
 
-  it('checks each type', () =>{
+  it('checks each type', () => {
     cy.get('input[type="radio"]')
       .each(typeOfService => {
         cy.wrap(typeOfService)
@@ -112,17 +111,42 @@ describe('Central de Atendimento ao Cliente TAT', () => {
       );
   })
 
-  it('checks both checkbox and uncheck the last one', ()=>{
+  it('checks both checkbox and uncheck the last one', () => {
     cy.get('input[type="checkbox"]')
       .each(typeOfService => {
         cy.wrap(typeOfService)
-        .check()
-        .should('be.checked')
+          .check()
+          .should('be.checked')
       });
     cy.get('input[type="checkbox"]')
-    .last()
-    .uncheck()
-    .should('not.be.checked');
+      .last()
+      .uncheck()
+      .should('not.be.checked');
+  })
+
+  it('select a file from fixtures', () => {
+    cy.get('#file-upload')
+      .selectFile('cypress/fixtures/example.json')
+      .should(input => {
+        expect(input[0].files[0].name).to.equal('example.json')
+      });
+  })
+
+  it('select a file simulating drag-and-drop', () => {
+    cy.get('#file-upload')
+      .selectFile('cypress/fixtures/example.json', { action: 'drag-drop' })
+      .should(input => {
+        expect(input[0].files[0].name).to.equal('example.json')
+      });
+  })
+
+  it('select a file where fixture has an alias', () => {
+    cy.fixture('example.json').as('sampleFile');
+    cy.get('#file-upload')
+      .selectFile('@sampleFile')
+      .should(input => {
+        expect(input[0].files[0].name).to.equal('example.json')
+      });
   })
 
 })
