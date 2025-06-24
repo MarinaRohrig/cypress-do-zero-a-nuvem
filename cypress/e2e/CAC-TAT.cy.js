@@ -149,4 +149,26 @@ describe('Central de Atendimento ao Cliente TAT', () => {
       });
   })
 
+  it('link opening in another tab', () => {
+    cy.get('a')
+      .should('have.attr', 'target', '_blank')
+      .and('have.attr', 'href', 'privacy.html');
+  })
+
+  it('link opening in the same tab with invoke', () => {
+    cy.contains('a', 'Política de Privacidade')
+      .invoke('removeAttr', 'target')
+      .click();
+
+    cy.url().should('include', 'privacy.html');
+  })
+
+  it('privacy page tests', () => {
+    cy.contains('a', 'Política de Privacidade')
+      .invoke('removeAttr', 'target')
+      .click();
+
+    cy.get('#white-background').should('be.visible');
+    cy.title().should('include', 'Política de Privacidade');
+  })
 })
