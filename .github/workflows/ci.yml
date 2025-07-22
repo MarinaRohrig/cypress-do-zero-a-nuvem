@@ -18,8 +18,9 @@ jobs:
       - name: Instalar dependências
         run: npm ci
 
-      - name: Rodar testes Cypress com gravação na nuvem
+      - name: Rodar testes Cypress com gravação
         uses: cypress-io/github-action@v6
         with:
           record: true
-          key: ${{ secrets.CYPRESS_RECORD_KEY }}
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
