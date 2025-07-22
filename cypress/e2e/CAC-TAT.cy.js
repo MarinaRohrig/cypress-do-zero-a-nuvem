@@ -7,11 +7,17 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.title().should('eq', 'Central de Atendimento ao Cliente TAT');
   })
 
-  it('Fill out and submit', () => {
+  it.only('Fill out and submit', () => {
+    cy.clock();
+
     cy.fillMandatoryFields();
     cy.contains('button', 'Enviar').click();
 
     cy.get('.success').should('be.visible');
+  
+    cy.tick(3000);
+
+    cy.get('.success').should('not.be.visible');
   })
 
   it('Error message when incorrect email', () => {
