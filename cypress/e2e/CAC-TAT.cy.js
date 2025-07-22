@@ -7,7 +7,7 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.title().should('eq', 'Central de Atendimento ao Cliente TAT');
   })
 
-  it.only('Fill out and submit', () => {
+  it('Fill out and submit', () => {
     cy.clock();
 
     cy.fillMandatoryFields();
