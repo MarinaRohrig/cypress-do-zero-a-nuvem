@@ -14,18 +14,24 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.contains('button', 'Enviar').click();
 
     cy.get('.success').should('be.visible');
-  
+
     cy.tick(3000);
 
     cy.get('.success').should('not.be.visible');
   })
 
   it('Error message when incorrect email', () => {
+    cy.clock();
+
     cy.fillMandatoryFields();
     cy.get('#email').clear().type('nome.sobrenome');
     cy.contains('button', 'Enviar').click();
 
     cy.get('.error').should('be.visible');
+
+    cy.tick(3000);
+
+    cy.get('.error').should('not.be.visible');
   })
 
   it('Fill phone with not numeric caracters', () => {
@@ -34,15 +40,22 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.get('#phone').should('have.value', '');
   })
   it('Error message when obrigatory phone is not filled', () => {
+    cy.clock();
+
     cy.fillMandatoryFields();
     cy.get('#phone').clear();
     cy.get('#phone-checkbox').check();
     cy.contains('button', 'Enviar').click();
 
     cy.get('.error').should('be.visible');
+
+    cy.tick(3000);
+
+    cy.get('.error').should('not.be.visible');
   })
 
   it('Fill and empty name, lastname, mail and phone', () => {
+    cy.clock();
     cy.fillMandatoryFields();
 
     cy.get('#firstName').should('have.value', 'Nome');
@@ -61,21 +74,38 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.get('#phone')
       .clear()
       .should('have.value', '');
+
+    cy.tick(3000);
+
+    cy.get('.success').should('not.be.visible');
   })
 
   it('Error message when nothing is filled', () => {
+    cy.clock();
+
     cy.contains('button', 'Enviar').click();
 
     cy.get('.error').should('be.visible');
+
+    cy.tick(3000);
+
+    cy.get('.error').should('not.be.visible');
   })
 
   it('Fill out and submit using custom command', () => {
+    cy.clock();
+
     cy.fillMandatoryFieldsAndSubmit();
 
     cy.get('.success').should('be.visible');
+
+    cy.tick(3000);
+
+    cy.get('.success').should('not.be.visible');
   })
 
   it('Fill out and submit using custom command', () => {
+    cy.clock();
     const data = {
       firstName: 'Marina',
       lastName: 'Larissa',
@@ -86,6 +116,10 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.fillMandatoryFields();
     cy.contains('button', 'Enviar').click();
     cy.get('.success').should('be.visible');
+
+    cy.tick(3000);
+
+    cy.get('.success').should('not.be.visible');
   })
 
   it('select a product (YouTube) by text', () => {
