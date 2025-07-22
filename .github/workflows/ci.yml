@@ -1,14 +1,25 @@
 name: End-to-end tests
+
 on: push
+
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout do repositório
         uses: actions/checkout@v4
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
-        env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          command: npm run test:cloud
+          node-version: 18
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Rodar testes Cypress com gravação na nuvem
+        uses: cypress-io/github-action@v6
+        with:
+          record: true
+          key: ${{ secrets.CYPRESS_RECORD_KEY }}
